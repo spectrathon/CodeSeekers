@@ -1,21 +1,16 @@
 import React, { Component, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import CaretakerLogin from './components/CaretakerLogin';
+import CaretakerSignUp from './components/CaretakerSignUp';
 const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>App</Text>
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      {/* <CaretakerLogin/> */}
+      <CaretakerSignUp/>
+    </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#2c3e50',
-  },
-});
 
 export default App;
