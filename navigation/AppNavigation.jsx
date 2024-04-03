@@ -9,6 +9,7 @@ import UserSignUp from '../components/Register/UserSignUp';
 import UserLogin from '../components/Register/UserLogin';
 import UserHome from '../components/Home/UserHome';
 import CaretakerHome from '../components/Home/CaretakerHome';
+import Maps from '../components/Maps'
 
 const Stack = createNativeStackNavigator();
 const AppNavigation = (props) => {
@@ -79,6 +80,7 @@ else if (isLoggedIn && role==="caretaker" && code){
   return (
       <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="CaretakerHome" >
         <Stack.Screen name="CaretakerHome" component={CaretakerHome}/>
+        <Stack.Screen name="Maps"  component={Maps}/>
       </Stack.Navigator>
   );
 }
