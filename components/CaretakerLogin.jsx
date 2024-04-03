@@ -9,11 +9,9 @@ const CaretakerLogin = () => {
   const handleLogin = () => {
     console.log('Username:', username);
     console.log('Password:', password);
-    // Implement login functionality here
   };
 
   const handleSignUp = () => {
-    // Implement navigation logic to the sign up page
   };
 
   return (

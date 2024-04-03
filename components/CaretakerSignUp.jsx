@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient'; // Import LinearGradient
+import LinearGradient from 'react-native-linear-gradient'; 
 
 const CaretakerSignUp = () => {
   const [name, setName] = useState('');
@@ -8,11 +8,9 @@ const CaretakerSignUp = () => {
   const [password, setPassword] = useState('');
   
   const handleLogin = () => {
-    // Implement login functionality here
     console.log('Name:', name);
     console.log('Username:', username);
     console.log('Password:', password);
-    // You can perform authentication logic here
   };
 
   return (
@@ -31,27 +29,27 @@ const CaretakerSignUp = () => {
             placeholder="Name"
             onChangeText={setName}
             value={username}
-            placeholderTextColor="#666" // Adjust placeholder text color
+            placeholderTextColor="#666" 
           />
           <TextInput
             style={styles.input}
             placeholder="Username"
             onChangeText={setUsername}
             value={username}
-            placeholderTextColor="#666" // Adjust placeholder text color
+            placeholderTextColor="#666" 
           />
           <TextInput
             style={styles.input}
             placeholder="Password"
             onChangeText={setPassword}
             value={password}
-            secureTextEntry // Hides the entered text
-            placeholderTextColor="#666" // Adjust placeholder text color
+            secureTextEntry 
+            placeholderTextColor="#666" 
           />
             <Button
             title="Sign up"
             onPress={handleLogin}
-            color="rgba(246,144,56,1)" // Orange color for the button
+            color="rgba(246,144,56,1)" 
             />
         </View>
       </View>
@@ -71,8 +69,8 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: '100%',
-    backgroundColor: 'white', // White background for input container
-    borderRadius: 10, // Rounded corners
+    backgroundColor: 'white', 
+    borderRadius: 10, 
     paddingHorizontal: 20,
     paddingVertical: 30,
     marginBottom: 20,
@@ -80,7 +78,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 34,
     fontWeight: 'bold',
-    color: 'rgba(242,111,97,1)', // Adjust header text color
+    color: 'rgba(242,111,97,1)', 
     marginBottom: 20,
     textAlign: 'center'
   },
@@ -91,7 +89,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 10,
-    color: '#333', // Adjust text color
+    color: '#333', 
   },
 });
 
