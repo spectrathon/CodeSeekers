@@ -12,7 +12,7 @@ const LoginProvider = props => {
     const [caretaker, setCaretaker] = useState({name: '', email: '', age: '', gender: '', number: '', });
     const [userCurrentLocation, setUserCurrentLocation] = useState([74,15]);
     const [userHomeLocation, setUserHomeLocation] = useState([73.98100068685548, 15.423282817707287]);
-    const [radius, setRadius] = useState(0);
+    const [radius, setRadius] = useState(0.01);
     return (
       <LoginContext.Provider
         value={{
