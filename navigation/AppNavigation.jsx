@@ -31,14 +31,13 @@ const AppNavigation = () => {
     setCaretaker(JSON.parse(tempCaretakerDetails));
     setCode(tempCode);
     setRole(tempRole);
-    
     if(tempLogin==="true"){
         setIsLoggedIn(true);
     }
-    
-    console.log("tempCode : ",tempCode,"| tempLogin : ",tempLogin," | tempRole : ",tempRole);
-    console.log("Code : ",code,"| isLoggedIn : ",isLoggedIn," | role : ",role);
-    console.log("Caretaker : ",caretaker);
+    // console.log("tempCode : ",tempCode,"| tempLogin : ",tempLogin," | tempRole : ",tempRole);
+    // console.log("Code : ",code,"| isLoggedIn : ",isLoggedIn," | role : ",role);
+    // console.log("Caretaker : ",caretaker);
+
  }
 
  if (loading) {
@@ -53,9 +52,8 @@ if(!isLoggedIn){
   return (
       <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="UserLogin"  >
           <Stack.Screen name="UserLogin"  component={UserLogin} /> 
-            <Stack.Screen name="CaretakerSignUp" component={CaretakerSignUp}/>
             <Stack.Screen name="CaretakerLogin" component={CaretakerLogin}/>
-            <Stack.Screen name="UserSignUp" component={UserSignUp}/>
+            <Stack.Screen name="CaretakerSignUp" component={CaretakerSignUp}/>
        </Stack.Navigator>
   )
 }
@@ -68,8 +66,8 @@ else if (isLoggedIn && role==="user") {
 }
 else if (isLoggedIn && role==="caretaker" && !code){
   return (
-      <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="Loading" >
-        <Stack.Screen name="Loading" component={Loading}/>
+      <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="UserSignUp" >
+        <Stack.Screen name="UserSignUp" component={UserSignUp}/>
       </Stack.Navigator>
   );
 }

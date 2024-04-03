@@ -1,9 +1,10 @@
-//import liraries
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-// create a component
 const UserHome = () => {
+    useEffect(()=>{
+        
+    },[]);
     return (
         <View style={styles.container}>
             <Text>UserHome</Text>
@@ -11,7 +12,6 @@ const UserHome = () => {
     );
 };
 
-// define your styles
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -21,5 +21,4 @@ const styles = StyleSheet.create({
     },
 });
 
-//make this component available to the app
 export default UserHome;

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { View, TextInput,Alert, Button, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { useLogin } from '../../context/LoginProvider';
 
 const CaretakerLogin = ({navigation}) => {
   const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredPassword, setEnteredPassword] = useState('');
   const [enteredCode, setEnteredCode] = useState('');
+  const {setIsLoggedIn,setRole,setCode}  = useLogin();
 
   const handleLogin = async() => {
     if (!enteredCode.trim()||!enteredEmail.trim()||!enteredPassword.trim()) {
@@ -74,7 +76,9 @@ const CaretakerLogin = ({navigation}) => {
             color="rgba(246,144,56,1)"
           />
           <TouchableOpacity>
-            <Text onPress={()=>navigation.navigate("CaretakerSignUp")} style={styles.signupText}>Create a new account? Sign up</Text>
+            <Text onPress={()=>navigation.navigate("CaretakerSignUp")} style={styles.signupText}>Create a new account?
+            <Text style={{color:"blue"}} > Sign up</Text>
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -117,7 +121,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   signupText: {
-    color: 'blue',
+    color: 'black',
     marginTop: 10,
     textDecorationLine: 'underline',
     textAlign: 'center'

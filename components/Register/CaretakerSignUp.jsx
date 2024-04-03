@@ -38,8 +38,8 @@ const CaretakerSignup = ({navigation}) => {
       setRole("caretaker");
       setIsLoggedIn(true);
       setCaretaker(details)
-      navigation.navigate("UserSignUp");
       console.log('User account created & signed in!');
+      navigation.navigate("UserSignUp");
   } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
           console.log('That email address is already in use!');

@@ -16,7 +16,7 @@ const UserSignUp = ({navigation}) => {
 
   useEffect(()=>{
     if (code) {
-      navigation.navigate("Loading");
+      navigation.navigate("CaretakerHome");
     }
   },);
 
@@ -47,7 +47,7 @@ const UserSignUp = ({navigation}) => {
       await AsyncStorage.setItem('code', code);
       setCode(code);
       console.log('Code generated!');
-      navigation.navigate("Loading");
+      navigation.navigate("CaretakerHome");
     } catch (error) {
       console.log(error);
     }
