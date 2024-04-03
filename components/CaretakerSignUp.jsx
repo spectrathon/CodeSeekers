@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient'; 
 
-const CaretakerLogin = () => {
+const CaretakerSignUp = () => {
+  const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
+  
   const handleLogin = () => {
+    console.log('Name:', name);
     console.log('Username:', username);
     console.log('Password:', password);
-  };
-
-  const handleSignUp = () => {
   };
 
   return (
@@ -27,27 +26,31 @@ const CaretakerLogin = () => {
           <Text style={styles.header}>SafeMinder</Text>
           <TextInput
             style={styles.input}
+            placeholder="Name"
+            onChangeText={setName}
+            value={username}
+            placeholderTextColor="#666" 
+          />
+          <TextInput
+            style={styles.input}
             placeholder="Username"
             onChangeText={setUsername}
             value={username}
-            placeholderTextColor="#666"
+            placeholderTextColor="#666" 
           />
           <TextInput
             style={styles.input}
             placeholder="Password"
             onChangeText={setPassword}
             value={password}
-            secureTextEntry
-            placeholderTextColor="#666"
+            secureTextEntry 
+            placeholderTextColor="#666" 
           />
-          <Button
-            title="Login"
+            <Button
+            title="Sign up"
             onPress={handleLogin}
-            color="rgba(246,144,56,1)"
-          />
-          <TouchableOpacity onPress={handleSignUp}>
-            <Text style={styles.signupText}>Create a new account? Sign up</Text>
-          </TouchableOpacity>
+            color="rgba(246,144,56,1)" 
+            />
         </View>
       </View>
     </LinearGradient>
@@ -64,20 +67,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
   },
-  header: {
-    fontSize: 34,
-    fontWeight: 'bold',
-    color: 'rgba(242,111,97,1)',
-    marginBottom: 20,
-    textAlign: 'center'
-  },
   inputContainer: {
     width: '100%',
-    backgroundColor: 'white',
-    borderRadius: 10,
+    backgroundColor: 'white', 
+    borderRadius: 10, 
     paddingHorizontal: 20,
     paddingVertical: 30,
     marginBottom: 20,
+  },
+  header: {
+    fontSize: 34,
+    fontWeight: 'bold',
+    color: 'rgba(242,111,97,1)', 
+    marginBottom: 20,
+    textAlign: 'center'
   },
   input: {
     height: 40,
@@ -86,14 +89,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 10,
-    color: '#333',
-  },
-  signupText: {
-    color: 'rgba(246,144,56,1)',
-    marginTop: 10,
-    textDecorationLine: 'underline',
-    textAlign: 'center'
+    color: '#333', 
   },
 });
 
-export default CaretakerLogin;
+export default CaretakerSignUp;
