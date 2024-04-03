@@ -39,6 +39,12 @@ const UserSignUp = ({navigation}) => {
       const data = {
         caretakerName:caretaker.name,
         caretakerEmail:caretaker.email,
+        medication:[],
+        fallDetected:false,
+        boundStatus:false,
+        homeLocation:{latitude:15.16,longitude:74.012},
+        userLocation:{latitude:23.241,longitude:78.39},
+        radius:0,
         user: {name, caretakerName:caretaker.name,caretakerEmail:caretaker.email, code, email, age},
         code,
       };

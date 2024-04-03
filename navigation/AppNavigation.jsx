@@ -1,6 +1,5 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React,{useState,useEffect} from 'react';
-import {View,LogBox, Text, StyleSheet} from 'react-native';
 import CaretakerSignUp from '../components/Register/CaretakerSignUp';
 import CaretakerLogin from '../components/Register/CaretakerLogin';
 import {useLogin } from '../context/LoginProvider';
@@ -11,10 +10,9 @@ import UserLogin from '../components/Register/UserLogin';
 import UserHome from '../components/Home/UserHome';
 import CaretakerHome from '../components/Home/CaretakerHome';
 
-LogBox.ignoreLogs(['new NativeEventEmitter']);
-
 const Stack = createNativeStackNavigator();
-const AppNavigation = () => {
+const AppNavigation = (props) => {
+ const {setShowNavbar} = props;
   const { isLoggedIn,setIsLoggedIn,role,setRole,code,setCode,caretaker,setCaretaker} = useLogin();
   const [loading,setLoading] = useState(true);
   
@@ -34,6 +32,12 @@ const AppNavigation = () => {
     if(tempLogin==="true"){
         setIsLoggedIn(true);
     }
+    if (role==="user") {
+      setShowNavbar(false);
+  }
+  else {
+      setShowNavbar(false);
+  }
     // console.log("tempCode : ",tempCode,"| tempLogin : ",tempLogin," | tempRole : ",tempRole);
     // console.log("Code : ",code,"| isLoggedIn : ",isLoggedIn," | role : ",role);
     // console.log("Caretaker : ",caretaker);

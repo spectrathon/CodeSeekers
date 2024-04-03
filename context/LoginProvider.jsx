@@ -4,17 +4,39 @@ import { createContext } from "react";
 
 const LoginContext = createContext();
 
-const LoginProvider = (props) =>{
-    const [role,setRole] = useState("user");
-    const [isLoggedIn,setIsLoggedIn] = useState(false);
-    const [code,setCode] = useState("");
+const LoginProvider = props => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [role, setRole] = useState(null);
+    const [permission, setPermission] = useState(false);
+    const [code, setCode] = useState(null);
     const [caretaker, setCaretaker] = useState({name: '', email: '', age: '', gender: '', number: '', });
+    const [userCurrentLocation, setUserCurrentLocation] = useState([74,15]);
+    const [userHomeLocation, setUserHomeLocation] = useState([73.98100068685548, 15.423282817707287]);
+    const [radius, setRadius] = useState(0);
     return (
-        <LoginContext.Provider value={{role,setRole,isLoggedIn,setIsLoggedIn,code,setCode,caretaker,setCaretaker}} >
-            {props.children}
-        </LoginContext.Provider>
+      <LoginContext.Provider
+        value={{
+          isLoggedIn,
+          setIsLoggedIn,
+          role,
+          setRole,
+          code,
+          setCode,
+          caretaker,
+          setCaretaker,
+          userCurrentLocation,
+          setUserCurrentLocation,
+          radius,
+          setRadius,
+          permission,
+          setPermission,
+          userHomeLocation,
+          setUserHomeLocation,
+        }}>
+        {props.children}
+      </LoginContext.Provider>
     );
-}
+  };
 
 export default LoginProvider;
 

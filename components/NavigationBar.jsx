@@ -2,7 +2,6 @@ import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
-// Define your SVG strings
 const HealthIconSvg = `
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
