@@ -37,7 +37,6 @@ const CaretakerSignup = ({navigation}) => {
       await AsyncStorage.setItem('caretakerDetails', JSON.stringify(details));
       setRole("caretaker");
       setIsLoggedIn(true);
-      setIsLoggedIn(true);
       setCaretaker(details)
       
       console.log('User account created & signed in!');
