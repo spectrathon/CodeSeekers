@@ -5,33 +5,35 @@ import MedicationContent from './MedicationContent';
 import NavigationBar from './NavigationBar';
 import { Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import LeftImage from '../assets/logo_app.png';
-import RightImage from '../assets/setting.png';
+import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useLogin } from '../context/LoginProvider';
+
 
 const defaultStartDate = 'From Date';
 const defaultEndDate = 'To Date';
 const defaultTime = 'Set Time';
 
 const mealImages = {
-  breakfast: require('../assets/breakfast.png'),
-  lunch: require('../assets/Lunch.png'),
-  snack: require('../assets/snack.png'),
-  dinner: require('../assets/dinner.png'),
-};
-
-const selectedImages = {
   breakfast: require('../assets/breakfastActive.png'),
   lunch: require('../assets/lunchAcctive.png'),
   snack: require('../assets/snackActive.png'),
   dinner: require('../assets/dinnerActive.png'),
 };
 
+const selectedImages = {
+  breakfast: require('../assets/breakfast.png'),
+  lunch: require('../assets/Lunch.png'),
+  snack: require('../assets/snack.png'),
+  dinner: require('../assets/dinner.png'),
+};
+
 const Medication = () => {
+  const {medication,code,setMedication} = useLogin();
   const [title, setTitle] = useState('');
   const [dateInput1, setDateInput1] = useState(defaultStartDate);
   const [dateInput2, setDateInput2] = useState(defaultEndDate);
-  const [input4, setInput4] = useState(defaultTime);
-  const [input5, setInput5] = useState('');
+  const [timeInput,SetTimeInput] = useState(defaultTime);
   const [showDatePicker1, setShowDatePicker1] = useState(false);
   const [showDatePicker2, setShowDatePicker2] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
@@ -43,6 +45,8 @@ const Medication = () => {
     snack: false,
     dinner: false,
   });
+
+  
 
   const toggleMeal = (meal) => {
     setMealState((prevState) => ({
@@ -71,15 +75,44 @@ const Medication = () => {
     setShowTimePicker(false);
     if (selectedTime) {
       const formattedTime = `${selectedTime.getHours()}:${selectedTime.getMinutes()}`;
-      setInput4(formattedTime);
+      SetTimeInput(formattedTime);
     }
   };
 
-  const handleSubmit = () => {
-    console.log('Title:', title);
-    console.log('Input 1:', dateInput1);
-    console.log('Input 2:', dateInput2);
-    console.log('Input 4:', input4);
+  const handleSubmit = async () => {
+    // Validate if the dates and time are selected
+    if (dateInput1 === defaultStartDate || dateInput2 === defaultEndDate || timeInput === defaultTime) {
+      alert("Please select both dates and time.");
+      return;
+    }
+    
+    const date1Split = dateInput1.split("/");
+    const date2Split = dateInput2.split("/");
+    const timeFormatted = timeInput.split(":");
+    
+    const params = {
+      title,
+      timeInput,
+      dayStart1: date1Split[0],
+      dayStart2: date2Split[0],
+      monthStart1: date1Split[1],
+      monthStart2: date2Split[1],
+      yearStart1: date1Split[2],
+      yearStart2: date2Split[2],
+      hours: timeFormatted[0],
+      minutes: timeFormatted[1],
+    };
+    
+    try {
+      console.log(medication);
+      const updatedMeds = [...medication, params]; // Use a spread operator to create a new array
+      await firestore().collection('Users').doc("57f490").update({ medication: updatedMeds });
+      const medsString = JSON.stringify(updatedMeds);
+      await AsyncStorage.setItem("meds", medsString);
+      setMedication(updatedMeds); // Update state
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -119,7 +152,7 @@ const Medication = () => {
               style={[styles.datePickerButton, styles.whiteBackground, { marginTop: 30, left: 5, bottom: 219 }]}
               onPress={() => setShowTimePicker(true)}
             >
-              <Text style={styles.datePickerButtonText}>{input4}</Text>
+              <Text style={styles.datePickerButtonText}>{timeInput}</Text>
             </TouchableOpacity>
             {showTimePicker && (
               <DateTimePicker

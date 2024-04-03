@@ -11,11 +11,11 @@ import UserHome from '../components/Home/UserHome';
 import CaretakerHome from '../components/Home/CaretakerHome';
 import Maps from '../components/Maps'
 import Allbackgroundservices from '../components/Userbackgroundservices/Alluserbackgroundservices';
+import Medication from "../components/Medication"
 
 const Stack = createNativeStackNavigator();
-const AppNavigation = (props) => {
- const {setShowNavbar} = props;
-  const { isLoggedIn,setIsLoggedIn,role,setRole,code,setCode,caretaker,setCaretaker} = useLogin();
+const AppNavigation = () => {
+  const { isLoggedIn,setIsLoggedIn,role,setRole,code,setCode,caretaker,setCaretaker,medication, setMedication} = useLogin();
   const [loading,setLoading] = useState(true);
   
   useEffect(()=>{
@@ -28,18 +28,19 @@ const AppNavigation = (props) => {
     const tempLogin = await AsyncStorage.getItem('login');
     const tempCode = await AsyncStorage.getItem('code');
     const tempCaretakerDetails = await AsyncStorage.getItem('caretakerDetails');
+    const tempMedContent = await AsyncStorage.getItem('meds');
     setCaretaker(JSON.parse(tempCaretakerDetails));
+    if (tempMedContent) {
+      setMedication(JSON.parse(tempMedContent));
+    }
+    else {
+      setMedication([]);
+    }
     setCode(tempCode);
     setRole(tempRole);
     if(tempLogin==="true"){
         setIsLoggedIn(true);
     }
-    if (role==="user") {
-      setShowNavbar(false);
-  }
-  else {
-      setShowNavbar(false);
-  }
     // console.log("tempCode : ",tempCode,"| tempLogin : ",tempLogin," | tempRole : ",tempRole);
     // console.log("Code : ",code,"| isLoggedIn : ",isLoggedIn," | role : ",role);
     // console.log("Caretaker : ",caretaker);
@@ -83,6 +84,7 @@ else if (isLoggedIn && role==="caretaker" && code){
       <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="CaretakerHome" >
         <Stack.Screen name="CaretakerHome" component={CaretakerHome}/>
         <Stack.Screen name="Maps"  component={Maps}/>
+        <Stack.Screen name="Medication"  component={Medication}/>
       </Stack.Navigator>
   );
 }

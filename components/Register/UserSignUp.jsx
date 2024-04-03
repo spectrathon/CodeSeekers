@@ -39,6 +39,8 @@ const UserSignUp = ({navigation}) => {
       const data = {
         caretakerName:caretaker.name,
         caretakerEmail:caretaker.email,
+        caretakerNo:caretaker.number,
+        userNo:number,
         medication:[],
         fallDetected:false,
         boundStatus:false,
