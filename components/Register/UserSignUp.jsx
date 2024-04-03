@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, TextInput, Button, StyleSheet} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient'; // Import LinearGradient
+import LinearGradient from 'react-native-linear-gradient';
 import {useLogin} from '../../context/LoginProvider';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -12,7 +12,7 @@ const UserSignUp = ({navigation}) => {
   const [age, setAge] = useState('');
   const [gender, setGender] = useState('');
   const [number, setNumber] = useState('');
-  const {caretaker,setCode} = useLogin();
+  const {caretaker,code,setCode} = useLogin();
 
   useEffect(()=>{
     if (code) {
@@ -47,6 +47,7 @@ const UserSignUp = ({navigation}) => {
       await AsyncStorage.setItem('code', code);
       setCode(code);
       console.log('Code generated!');
+      navigation.navigate("Loading");
     } catch (error) {
       console.log(error);
     }

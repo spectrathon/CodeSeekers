@@ -6,6 +6,10 @@ import CaretakerLogin from '../components/Register/CaretakerLogin';
 import {useLogin } from '../context/LoginProvider';
 import Loading from '../components/Loading/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import UserSignUp from '../components/Register/UserSignUp';
+import UserLogin from '../components/Register/UserLogin';
+import UserHome from '../components/Home/UserHome';
+import CaretakerHome from '../components/Home/CaretakerHome';
 
 LogBox.ignoreLogs(['new NativeEventEmitter']);
 
@@ -47,15 +51,18 @@ const AppNavigation = () => {
 
 if(!isLoggedIn){
   return (
-      <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="Loading"  >
-            <Stack.Screen name="Loading" component={Loading}/>
+      <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="UserLogin"  >
+          <Stack.Screen name="UserLogin"  component={UserLogin} /> 
+            <Stack.Screen name="CaretakerSignUp" component={CaretakerSignUp}/>
+            <Stack.Screen name="CaretakerLogin" component={CaretakerLogin}/>
+            <Stack.Screen name="UserSignUp" component={UserSignUp}/>
        </Stack.Navigator>
   )
 }
 else if (isLoggedIn && role==="user") {
    return (
-       <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="Loading">
-        <Stack.Screen name="Loading" component={Loading}/>
+       <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="UserHome">
+        <Stack.Screen name="UserHome" component={UserHome}/>
        </Stack.Navigator>
    );
 }
@@ -68,8 +75,8 @@ else if (isLoggedIn && role==="caretaker" && !code){
 }
 else if (isLoggedIn && role==="caretaker" && code){
   return (
-      <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="Loading" >
-        <Stack.Screen name="Loading" component={Loading}/>
+      <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="CaretakerHome" >
+        <Stack.Screen name="CaretakerHome" component={CaretakerHome}/>
       </Stack.Navigator>
   );
 }

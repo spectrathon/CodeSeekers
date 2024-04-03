@@ -1,17 +1,38 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, TextInput,Alert, Button, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
-const CaretakerLogin = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+const CaretakerLogin = ({navigation}) => {
+  const [enteredEmail, setEnteredEmail] = useState('');
+  const [enteredPassword, setEnteredPassword] = useState('');
+  const [enteredCode, setEnteredCode] = useState('');
 
-  const handleLogin = () => {
-    console.log('Username:', username);
-    console.log('Password:', password);
-  };
-
-  const handleSignUp = () => {
+  const handleLogin = async() => {
+    if (!enteredCode.trim()||!enteredEmail.trim()||!enteredPassword.trim()) {
+      Alert.alert('Error', 'All fields are required.');
+      return;
+    }
+    try {
+        // const res = await auth().createUserWithEmailAndPassword('jane.doe@example.com', 'SuperSecretPassword!');
+      const userCredentials = await auth().signInWithEmailAndPassword(enteredEmail,enteredPassword);
+      const res = await firestore().collection('Users').doc(enteredCode).get();
+      const response = res._data;
+      console.log(response);
+      if(!response){
+        Alert.alert("Code doesn't exist!");
+        return;
+      }
+      await AsyncStorage.setItem('code', enteredCode);
+      await AsyncStorage.setItem('login',"true");
+      await AsyncStorage.setItem('role',"caretaker");
+      setCode(enteredCode);
+      setRole("caretaker");
+      setIsLoggedIn(true);
+    } catch (error) {
+      if(error.code ==='auth/invalid-credential'){
+        Alert.alert("Email not registered");
+      }
+    }
   };
 
   return (
@@ -27,17 +48,24 @@ const CaretakerLogin = () => {
           <Text style={styles.header}>SafeMinder</Text>
           <TextInput
             style={styles.input}
-            placeholder="Username"
-            onChangeText={setUsername}
-            value={username}
+            placeholder="Email"
+            onChangeText={setEnteredEmail}
+            value={enteredEmail}
             placeholderTextColor="#666"
           />
           <TextInput
             style={styles.input}
             placeholder="Password"
-            onChangeText={setPassword}
-            value={password}
+            onChangeText={setEnteredPassword}
+            value={enteredPassword}
             secureTextEntry
+            placeholderTextColor="#666"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Code"
+            onChangeText={setEnteredCode}
+            value={enteredCode}
             placeholderTextColor="#666"
           />
           <Button
@@ -45,8 +73,8 @@ const CaretakerLogin = () => {
             onPress={handleLogin}
             color="rgba(246,144,56,1)"
           />
-          <TouchableOpacity onPress={handleSignUp}>
-            <Text style={styles.signupText}>Create a new account? Sign up</Text>
+          <TouchableOpacity>
+            <Text onPress={()=>navigation.navigate("CaretakerSignUp")} style={styles.signupText}>Create a new account? Sign up</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -89,7 +117,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   signupText: {
-    color: 'rgba(246,144,56,1)',
+    color: 'blue',
     marginTop: 10,
     textDecorationLine: 'underline',
     textAlign: 'center'

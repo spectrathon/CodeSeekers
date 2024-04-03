@@ -38,7 +38,7 @@ const CaretakerSignup = ({navigation}) => {
       setRole("caretaker");
       setIsLoggedIn(true);
       setCaretaker(details)
-      
+      navigation.navigate("UserSignUp");
       console.log('User account created & signed in!');
   } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
@@ -123,11 +123,11 @@ const CaretakerSignup = ({navigation}) => {
             />
         <Text style={{color:"black",paddingTop:30}} >
            Caretaker already registered?
-          <Text style={{color:"blue",paddingTop:30}} onPress={()=>navigation.navigate("CaretakerLogin")}> Login</Text>
+          <Text style={{color:"blue",paddingTop:30}} onPress={()=>navigation.navigate("CaretakerLogin")}>Login</Text>
           </Text>
         <Text style={{color:"black",paddingTop:5}} >
           Are you a User?
-          <Text style={{color:"blue",paddingTop:30}} onPress={()=>navigation.navigate("UserLogin")}> Register</Text>
+          <Text style={{color:"blue",paddingTop:30}} onPress={()=>navigation.navigate("UserLogin")}>Login</Text>
           </Text>
         </View>
       </View>
