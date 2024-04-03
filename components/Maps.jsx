@@ -1,36 +1,80 @@
-import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, Button, TextInput } from 'react-native';
+import React, { useState,useEffect } from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, Button, TextInput, Linking } from 'react-native';
 import { LinearGradient } from 'react-native-linear-gradient';
 import NavigationBar from './NavigationBar';
+import Mapbox,{MapView,Camera,ShapeSource} from '@rnmapbox/maps';
+import { useLogin } from '../context/LoginProvider';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
+import Loading from './Loading/Loading';
+Mapbox.setAccessToken('pk.eyJ1IjoiY29kZXNlZWtlcnMiLCJhIjoiY2x1ZmRidHkzMGtxMjJrcm84Nm93azFydyJ9.4PcFMmvYRH31QSZmtU1cXA');
 
 const Maps = () => {
   const [modalVisible, setModalVisible] = useState(false);
-//   const [latitude, setLatitude] = useState('');
-//   const [longitude, setLongitude] = useState('');
-  const [radius, setRadius] = useState('');
+  const [centerCoordinates, setCenterCoordinates] = useState([73.98100068685548, 15.423282817707287]);
+  const [coordinates, setCoordinates] = useState([]);
+  const {userCurrentLocation,setUserCurrentLocation,code,radius,userHomeLocation,setRadius,setUserHomeLocation} = useLogin();
+  const [locationToggle,setLocationToggle] = useState(false);
+  const [locRadius,setLocRadius] = useState(0);
+  const [loading,setLoading] = useState(true);
 
-  const handleSubmit = () => {
-    // console.log('Latitude:', latitude);
-    // console.log('Longitude:', longitude);
-    console.log('Radius:', radius);
-    // Add functionality to handle submission
+  useEffect(()=>{
+    setLoading(true);
+    fetchUserCoodinates();
+    setLocRadius(`${radius}`);
+    drawCircumference();
+    setLoading(false);
+  },[]);
+
+  const fetchUserCoodinates = async()=>{
+    setInterval(async() => {
+      const res = await firestore().collection('Users').doc(code).get();
+      const tempCoordinates = res._data.userLocation;
+      setUserCurrentLocation([tempCoordinates.longitude,tempCoordinates.latitude]);
+      console.log(1);
+    }, 15000);
+  }
+  useEffect(()=>{
+    if (coordinates.length>0) {
+      drawCircumference();
+    }
+  },[centerCoordinates,userHomeLocation,locRadius,radius]);
+  const handleSubmit = async() => {
+    console.log('Radius:', locRadius);
+    await AsyncStorage.setItem('radius', locRadius);
+    await AsyncStorage.setItem('userHomeLocation', JSON.stringify(centerCoordinates));
+    drawCircumference();
+    setRadius(locRadius);
+    setUserHomeLocation(centerCoordinates)
     setModalVisible(!modalVisible);
   };
-
-  const handleOption1Press = () => {
-    console.log('Option 1 Pressed from Medication');
-    // Add functionality for Option 1
+  const handleMapPress = (event) => {
+    setCenterCoordinates(event.geometry.coordinates);
   };
 
-  const handleOption2Press = () => {
-    console.log('Option 2 Pressed from Medication');
-    // Add functionality for Option 2
+  const drawCircumference = () => {
+    const numPoints = 360;
+    const points = [];
+  
+    // Convert radius to meters
+    const radiusMeters = parseFloat(radius)*1000;
+  
+    for (let i = 0; i < numPoints; i++) {
+      const angle = (Math.PI / 180) * (i * (360 / numPoints));
+      const latitude = centerCoordinates[1] + (radiusMeters / 111111) * Math.cos(angle);
+      const longitude = centerCoordinates[0] + (radiusMeters / (111111 * Math.cos(centerCoordinates[1]))) * Math.sin(angle);
+      points.push([longitude, latitude]);
+    }
+    // console.log('Circumference Points:', points);
+    setCoordinates(points);
   };
 
-  const handleOption3Press = () => {
-    console.log('Option 3 Pressed from Medication');
-    // Add functionality for Option 3
-  };
+  if(loading){
+    return(
+      <Loading/>
+    );
+  }
+
 
   return (
     <LinearGradient
@@ -42,15 +86,45 @@ const Maps = () => {
     >
       <View style={styles.container}>
         <View style={styles.box}>
-          <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(true)}>
+          <TouchableOpacity style={styles.modalButton1} disabled={locationToggle} onPress={() => setModalVisible(true)}>
             <Text style={styles.modalButtonText}>Set Radius</Text>
           </TouchableOpacity>
-          <Image
-            source={require('../assets/map.png')}
-            style={styles.image}
-          />
+          <TouchableOpacity style={styles.modalButton2} onPress={() => setLocationToggle((prev)=>!prev)}>
+            <Text style={styles.modalButtonText}>{locationToggle?"Lock":"Set"} Center</Text>
+          </TouchableOpacity>
+          <View style={{ flex: 1,height:100,width:400}}>
+      <MapView
+        style={{ flex: 1, marginHorizontal:40,marginTop:20,marginBottom:20}}
+        onPress={locationToggle && handleMapPress}
+      >
+        {centerCoordinates && (
+          <Mapbox.PointAnnotation
+            id="center"
+            coordinate={centerCoordinates}
+            />
+            )}
+        {userCurrentLocation[0]!==0 && userCurrentLocation[1]!==0 && 
+        <Mapbox.PointAnnotation
+            id="center"
+            coordinate={userCurrentLocation}
+          />}
+        {coordinates.length > 0 && (
+          <ShapeSource id="circumference" style={{zIndex:1}} shape={{ type: 'LineString', coordinates }}>
+            <Mapbox.LineLayer
+              id="circumferenceLayer"
+              style={{ lineDasharray: [2, 2], lineWidth: 2, lineColor: '#ff0000'}}
+            />
+          </ShapeSource>
+        )}
+        <Camera
+          zoomLevel={15}
+          centerCoordinate={centerCoordinates}
+        />
+      </MapView>
+    </View>
           <TouchableOpacity style={styles.navigationButton}>
-            <Text style={styles.navigationButtonText}>Navigate</Text>
+            <Text onPress={()=>Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${userCurrentLocation[1]},${userCurrentLocation[0]}`)} style={styles.navigationButtonText}>Navigate</Text>
+          
           </TouchableOpacity>
         </View>
         <Modal
@@ -60,36 +134,18 @@ const Maps = () => {
           onRequestClose={() => setModalVisible(!modalVisible)}
         >
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Set Location</Text>
-            {/* <TextInput
-              style={styles.input}
-              placeholder="Latitude"
-              placeholderTextColor="lightgray"
-              onChangeText={(text) => setLatitude(text)}
-            />
+            <Text style={styles.modalText}>Set Location (in kms)</Text>
             <TextInput
               style={styles.input}
-              placeholder="Longitude"
+              placeholder="Enter radius"
               placeholderTextColor="lightgray"
-              onChangeText={(text) => setLongitude(text)}
-            /> */}
-            <TextInput
-              style={styles.input}
-              placeholder="Radius"
-              placeholderTextColor="lightgray"
-              onChangeText={(text) => setRadius(text)}
+              keyboardType='number-pad'
+              value={locRadius}
+              onChangeText={setLocRadius}
             />
-            <Button title="Submit" onPress={() => handleSubmit()} />
+            <Button title="Submit" disabled={!centerCoordinates || !locRadius} onPress={() => handleSubmit()} />
           </View>
         </Modal>
-        <View style={styles.navbarContainer}>
-          <NavigationBar
-            style={styles.navbar}
-            onPressOption1={handleOption1Press}
-            onPressOption2={handleOption2Press}
-            onPressOption3={handleOption3Press}
-          />
-        </View>
       </View>
     </LinearGradient>
   );
@@ -121,13 +177,23 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     zIndex:-1,
   },
-  modalButton: {
+  modalButton1: {
     position: 'absolute',
-    top: 50,
+    top: 40,
     right: 20,
     padding: 10,
     backgroundColor: '#2990e0',
     borderRadius: 5,
+    zIndex:1
+  },
+  modalButton2: {
+    position: 'absolute',
+    top: 90,
+    right: 20,
+    padding: 10,
+    backgroundColor: '#2990e0',
+    borderRadius: 5,
+    zIndex:1
   },
   modalButtonText: {
     color: 'white',

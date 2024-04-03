@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { View, TextInput,Alert, Button, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useLogin } from '../../context/LoginProvider';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CaretakerLogin = ({navigation}) => {
   const [enteredEmail, setEnteredEmail] = useState('');
@@ -16,10 +19,11 @@ const CaretakerLogin = ({navigation}) => {
     }
     try {
         // const res = await auth().createUserWithEmailAndPassword('jane.doe@example.com', 'SuperSecretPassword!');
-      const userCredentials = await auth().signInWithEmailAndPassword(enteredEmail,enteredPassword);
-      const res = await firestore().collection('Users').doc(enteredCode).get();
-      const response = res._data;
-      console.log(response);
+        console.log("userCredentials");
+        const userCredentials = await auth().signInWithEmailAndPassword(enteredEmail,enteredPassword);
+        const res = await firestore().collection('Users').doc(enteredCode).get();
+        const response = res._data;
+        console.log(response);
       if(!response){
         Alert.alert("Code doesn't exist!");
         return;
@@ -30,6 +34,8 @@ const CaretakerLogin = ({navigation}) => {
       setCode(enteredCode);
       setRole("caretaker");
       setIsLoggedIn(true);
+      console.log("Logged");
+      navigation.navigate("CaretakerHome");
     } catch (error) {
       if(error.code ==='auth/invalid-credential'){
         Alert.alert("Email not registered");
@@ -54,6 +60,7 @@ const CaretakerLogin = ({navigation}) => {
             onChangeText={setEnteredEmail}
             value={enteredEmail}
             placeholderTextColor="#666"
+            autoCapitalize='none'
           />
           <TextInput
             style={styles.input}

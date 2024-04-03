@@ -3,10 +3,13 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 // create a component
-const CaretakerHome = () => {
+const CaretakerHome = ({navigation}) => {
     return (
         <View style={styles.container}>
             <Text>CaretakerHome</Text>
+            <Text></Text>
+            <Text onPress={()=>navigation.navigate("Maps")} >Maps</Text>
+            <Text></Text>
         </View>
     );
 };
