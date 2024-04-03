@@ -10,6 +10,7 @@ import UserLogin from '../components/Register/UserLogin';
 import UserHome from '../components/Home/UserHome';
 import CaretakerHome from '../components/Home/CaretakerHome';
 import Maps from '../components/Maps'
+import Allbackgroundservices from '../components/Userbackgroundservices/Alluserbackgroundservices';
 
 const Stack = createNativeStackNavigator();
 const AppNavigation = (props) => {
@@ -64,7 +65,8 @@ if(!isLoggedIn){
 }
 else if (isLoggedIn && role==="user") {
    return (
-       <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="UserHome">
+       <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="Allbackgroundservices">
+        <Stack.Screen name="Allbackgroundservices" component={Allbackgroundservices}/>
         <Stack.Screen name="UserHome" component={UserHome}/>
        </Stack.Navigator>
    );
