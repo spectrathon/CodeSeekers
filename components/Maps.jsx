@@ -166,7 +166,7 @@ const Maps = () => {
       style={styles.gradient}
     >
       <View style={styles.container}>
-        <Button title='start' onPress={startBackgroundService} />
+        {/* <Button title='start' onPress={startBackgroundService} /> */}
         <View style={styles.box}>
           <TouchableOpacity style={styles.modalButton1} disabled={locationToggle} onPress={() => setModalVisible(true)}>
             <Text style={styles.modalButtonText}>Set Radius</Text>
@@ -228,6 +228,7 @@ const Maps = () => {
             <Button title="Submit" disabled={!centerCoordinates || !locRadius} onPress={() => handleSubmit()} />
           </View>
         </Modal>
+      <NavigationBar/>
       </View>
     </LinearGradient>
   );
