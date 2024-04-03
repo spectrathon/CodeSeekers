@@ -14,6 +14,8 @@ import PushNotification from 'react-native-push-notification';
 const Maps = () => {
   // background function for caretaker for Fall and bounddetect
   const {code} = useLogin();
+  const [serviceRunning,setServiceRunning]=useState(false)
+  const [imageSource,setImageSource] = useState(require('../assets/settingblack.png'))
   const sleep = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
   // Background task function
@@ -75,12 +77,24 @@ const Maps = () => {
 
   // Function to start background service
   const startBackgroundService = async () => {
+    setImageSource(require('../assets/setting.png'))
     await BackgroundService.start(veryIntensiveTask, options);
+    setServiceRunning(true);
   };
 
   // Function to stop background service
   const stopBackgroundService = async () => {
+    setImageSource(require('../assets/settingblack.png'))
     await BackgroundService.stop(veryIntensiveTask, options);
+    setServiceRunning(false);
+  };
+
+  const toggleService = () => {
+    if (serviceRunning) {
+      stopBackgroundService();
+    } else {
+      startBackgroundService();
+    }
   };
 
 
@@ -155,7 +169,10 @@ const Maps = () => {
       <Loading/>
     );
   }
-
+  
+  const handleRightImagePress = () => {
+    // Add functionality for right image press
+  };
 
   return (
     <LinearGradient
@@ -166,7 +183,20 @@ const Maps = () => {
       style={styles.gradient}
     >
       <View style={styles.container}>
-        {/* <Button title='start' onPress={startBackgroundService} /> */}
+        <View style={styles.topMenu}>
+          <TouchableOpacity onPress={toggleService}>
+            <Image
+              source={imageSource}
+              style={styles.menuImage}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleRightImagePress}>
+            <Image
+              source={require('../assets/CAllButton.png')} 
+              style={[styles.menuImage, {width: 160, bottom: 7, height: 52.4}]}
+            />
+          </TouchableOpacity>
+        </View>
         <View style={styles.box}>
           <TouchableOpacity style={styles.modalButton1} disabled={locationToggle} onPress={() => setModalVisible(true)}>
             <Text style={styles.modalButtonText}>Set Radius</Text>
@@ -244,7 +274,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   box: {
-    height: '85%',
+    height: '78%',
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 10,
@@ -252,6 +282,7 @@ const styles = StyleSheet.create({
     margin: 10,
     justifyContent: 'space-between',
     alignItems: 'center',
+    bottom: -15,
   },
   image: {
     width: '100%',
@@ -268,6 +299,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#2990e0',
     borderRadius: 5,
     zIndex:1
+  },
+  menuImage: {
+    width: 40,
+    height: 40,
+    marginHorizontal: 10,
+  },
+  topMenu: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    bottom: -20,
   },
   modalButton2: {
     position: 'absolute',
