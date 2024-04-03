@@ -3,13 +3,15 @@ import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SvgXml } fr
 import { LinearGradient } from 'react-native-linear-gradient';
 import MedicationContent from './MedicationContent';
 import NavigationBar from './NavigationBar';
+import { Platform } from 'react-native';
+// import DateTimePicker from '@react-native-community/datetimepicker';
 import LeftImage from '../assets/logo_app.png';
 import RightImage from '../assets/setting.png';
 import DateTimePicker from '@react-native-community/datetimepicker'; // Import DateTimePicker
 
 const defaultStartDate = 'From Date'; // Default start date text
 const defaultEndDate = 'To Date'; // Default end date text
-const defaultTime = '00:00'; // Default time format
+const defaultTime = 'Set Time'; // Default time format
 
 const mealImages = {
   breakfast: require('../assets/breakfast.png'),
@@ -78,7 +80,7 @@ const Medication = () => {
     console.log('Input 1:', dateInput1);
     console.log('Input 2:', dateInput2);
     console.log('Input 4:', input4);
-    console.log('Input 5:', input5);
+    // console.log('Input 5:', input5);
     // Add functionality to handle submission
   };
 
@@ -109,13 +111,21 @@ const Medication = () => {
             value={title}
             onChangeText={setTitle}
           />
-          <TextInput
-            style={[styles.input, styles.whiteBackground, styles.blackText, {marginTop: 10, left: 52, bottom: 182}]}
-            placeholder="Medicine"
-            placeholderTextColor="gray"
-            value={title}
-            onChangeText={setTitle}
-          />
+          <View style={styles.inputRow}>
+              <Image source={require('../assets/Calendar.png')} style={[styles.dateImage, { left: 15, bottom: 180}]} />
+              <TouchableOpacity style={[styles.datePickerButton, styles.whiteBackground, {marginTop: 30, left: 5, bottom: 199}]} onPress={() => setShowTimePicker(true)}>
+                <Text style={styles.datePickerButtonText}>{input4}</Text>
+              </TouchableOpacity>
+              {showTimePicker && (
+                <DateTimePicker
+                  value={new Date()}
+                  mode="time"
+                  display="spinner"
+                  onChange={handleTimeChange}
+                />
+              )}
+            </View>
+
           <View style={styles.inputTable}>
             <View style={styles.inputRow}>
               <Image source={require('../assets/Calendar.png')} style={[styles.dateImage, { left: 20, bottom: 180}]} />
