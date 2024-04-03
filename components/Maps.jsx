@@ -7,13 +7,89 @@ import { useLogin } from '../context/LoginProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore from '@react-native-firebase/firestore';
 import Loading from './Loading/Loading';
+import BackgroundService from 'react-native-background-actions';
 Mapbox.setAccessToken('pk.eyJ1IjoiY29kZXNlZWtlcnMiLCJhIjoiY2x1ZmRidHkzMGtxMjJrcm84Nm93azFydyJ9.4PcFMmvYRH31QSZmtU1cXA');
+import PushNotification from 'react-native-push-notification';
 
 const Maps = () => {
+  // background function for caretaker for Fall and bounddetect
+  const {code} = useLogin();
+  const sleep = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
+
+  // Background task function
+  const veryIntensiveTask = async (taskDataArguments) => {
+    const { delay } = taskDataArguments;
+    await new Promise(async (resolve) => {
+      for (let i = 0; BackgroundService.isRunning(); i++) {
+        if (i%15===0 && i>14) {
+          try {
+              const res = await firestore().collection('Users').doc(code).get();
+              const fallDetectedStatus = res._data.fallDetected;
+              const boundDetectedStatus = res._data.boundStatus;
+              const userName = res._data.user.name;
+              if (boundDetectedStatus) {
+                showNotification(`${userName} is out of bound.`);
+              }
+              if (fallDetectedStatus) {
+                try {
+                  await firestore().collection('Users').doc(code).update({'fallDetected': false});
+                  showNotification(`${userName} has fallen down`);
+              } catch (error) {
+                  console.log(error);
+              }
+              }
+          } catch (error) {
+              console.log(error);
+          }
+      }        
+        await sleep(delay);
+      }
+    });
+  };
+  const showNotification = (mess) => {
+    PushNotification.localNotification({
+      channelId: "medication-channel", // Channel ID
+      title: 'Medication Reminder',
+      message: mess,
+      actions: ['Take Medication'], // Button label
+      // data:{screen:"CodeInfo"},
+      // onPress:navigation.navigate("Codeinfo")
+    });
+  };
+
+  // Options for background service
+  const options = {
+    taskName: 'BackgroundTimerTask',
+    taskTitle: 'Background Timer',
+    taskDesc: 'Running background timer',
+    taskIcon: {
+      name: 'ic_launcher',
+      type: 'mipmap',
+    },
+    color: '#ff00ff',
+    linkingURI: 'yourSchemeHere://chat/jane', // See Deep Linking for more info
+    parameters: {
+      delay: 1000,
+    },
+  };
+
+  // Function to start background service
+  const startBackgroundService = async () => {
+    await BackgroundService.start(veryIntensiveTask, options);
+  };
+
+  // Function to stop background service
+  const stopBackgroundService = async () => {
+    await BackgroundService.stop(veryIntensiveTask, options);
+  };
+
+
+
+  // Maps logic start here
   const [modalVisible, setModalVisible] = useState(false);
   const [centerCoordinates, setCenterCoordinates] = useState([73.98100068685548, 15.423282817707287]);
   const [coordinates, setCoordinates] = useState([]);
-  const {userCurrentLocation,setUserCurrentLocation,code,radius,userHomeLocation,setRadius,setUserHomeLocation} = useLogin();
+  const {userCurrentLocation,setUserCurrentLocation,radius,userHomeLocation,setRadius,setUserHomeLocation} = useLogin();
   const [locationToggle,setLocationToggle] = useState(false);
   const [locRadius,setLocRadius] = useState(0);
   const [loading,setLoading] = useState(true);
@@ -41,11 +117,16 @@ const Maps = () => {
   },[centerCoordinates,userHomeLocation,locRadius,radius]);
   const handleSubmit = async() => {
     console.log('Radius:', locRadius);
-    await AsyncStorage.setItem('radius', locRadius);
-    await AsyncStorage.setItem('userHomeLocation', JSON.stringify(centerCoordinates));
-    drawCircumference();
-    setRadius(locRadius);
-    setUserHomeLocation(centerCoordinates)
+    try {
+      await AsyncStorage.setItem('radius', locRadius);
+      await AsyncStorage.setItem('userHomeLocation', JSON.stringify(centerCoordinates));
+      drawCircumference();
+      setRadius(locRadius);
+      setUserHomeLocation(centerCoordinates);
+      await firestore().collection('Users').doc(code).update({radius:locRadius,homeLocation:{latitude:centerCoordinates[1],longitude:centerCoordinates[0]}});
+    } catch (error) {
+      console.log(error);
+    }
     setModalVisible(!modalVisible);
   };
   const handleMapPress = (event) => {

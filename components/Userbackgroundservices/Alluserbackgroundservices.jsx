@@ -252,7 +252,7 @@ export default function Allbackgroundservices() {
   }, []);
 
   const sleep = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
-  const count=0;
+  let count=0;
   // Background task function
   const veryIntensiveTask1 = async (taskDataArguments) => {
     const { delay } = taskDataArguments;
