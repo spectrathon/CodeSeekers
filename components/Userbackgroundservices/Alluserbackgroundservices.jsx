@@ -58,7 +58,8 @@ export default function Allbackgroundservices() {
                 }, 20000);
                 showNotification();
               }
-              console.log(`Accelerometer data: x=${acceleration.x}, y=${acceleration.y}, z=${acceleration.z}`);
+              console.log(`______`);
+              // console.log(`Accelerometer data: x=${acceleration.x}, y=${acceleration.y}, z=${acceleration.z}`);
               setLatestAcceleration(acceleration);
             },
             error => {
@@ -72,7 +73,8 @@ export default function Allbackgroundservices() {
           )
           .subscribe(
             gyro => {
-              console.log(`Gyroscope data: x=${gyro.x}, y=${gyro.y}, z=${gyro.z}`);
+              // console.log(`Gyroscope data: x=${gyro.x}, y=${gyro.y}, z=${gyro.z}`);
+              console.log(`______`);
               setLatestGyroscope(gyro);
             },
             error => {
@@ -196,7 +198,22 @@ export default function Allbackgroundservices() {
                   if (i%15===0 && i>14) {
                       try {
                           await firestore().collection('Users').doc(code).update({userLocation:{latitude:location.latitude,longitude:location.longitude}});
+                          const res = await firestore().collection('Users').doc(code).get();
+                          const tempRadius = res._data.radius;
+                          const centreLocation = [res._data.homeLocation.latitude,res._data.homeLocation.longitude];
                           console.log("Location Updated");
+                          // console.log(centreLocation);
+                          const distance = calculateDistance(location.latitude, location.longitude, centreLocation[0], centreLocation[1]);
+                          if (distance>tempRadius) {
+                            console.log("User out of bound");
+                            await firestore().collection('Users').doc(code).update({boundStatus:true});
+                            showNotification();
+                          }
+                          else {
+                            console.log("User inside bound");
+                            await firestore().collection('Users').doc(code).update({boundStatus:false});
+                          }
+
                       } catch (error) {
                           console.log(error);
                       }
@@ -234,6 +251,7 @@ export default function Allbackgroundservices() {
           await BackgroundService.stop(veryIntensiveTask, options);
       };
 
+      //Function for medication timer
   // Function to fetch data from Firestore
   const fetchUserData = async () => {
     try {
@@ -245,6 +263,28 @@ export default function Allbackgroundservices() {
       console.log(error);
     }
   };
+
+ //function for outOfboundLogic
+  const toRadians = (degrees) => {
+    return degrees * Math.PI / 180;
+  }
+
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    let earthRadiusKm = 6371; // Radius of the earth in kilometers
+  
+    let dLat = toRadians(lat2-lat1);  // Difference in latitude, convert from degrees to radians
+    let dLon = toRadians(lon2-lon1);  // Difference in longitude, convert from degrees to radians
+  
+    lat1 = toRadians(lat1);
+    lat2 = toRadians(lat2);
+  
+    let a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    let distance = earthRadiusKm * c; // Distance in km
+  
+    return distance;
+  }
 
   // useEffect to trigger data fetch on component mount
   useEffect(() => {
@@ -302,7 +342,7 @@ export default function Allbackgroundservices() {
       };
       
       const stopAllBackgroundServices = async () => {
-        await Promise.all([stopBackgroundService(), stopBackgroundService1(),startBackgroundService2()]);
+        await Promise.all([stopBackgroundService(), stopBackgroundService1(),stopBackgroundService2()]);
       };
       
   return (

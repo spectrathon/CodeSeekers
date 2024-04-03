@@ -165,24 +165,30 @@ const ProfileIconSvg = `
 
 const NavigationBar = ({ onPressOption1, onPressOption2, onPressOption3 }) => {
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={onPressOption1}>
-        <SvgXml xml={HealthIconSvg} width="24" height="24" style={styles.icon} />
-        <Text style={styles.text}>Health</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={onPressOption2}>
-        <SvgXml xml={LocateIconSvg} width="24" height="24" style={styles.icon} />
-        <Text style={styles.text}>Locate</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={onPressOption3}>
-        <SvgXml xml={ProfileIconSvg} width="24" height="24" style={styles.icon} />
-        <Text style={styles.text}>Profile</Text>
-      </TouchableOpacity>
+    <View style={styles.mainContainer}>
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.button} onPress={onPressOption1}>
+          <SvgXml xml={HealthIconSvg} width="24" height="24" style={styles.icon} />
+          <Text style={styles.text}>Health</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={onPressOption2}>
+          <SvgXml xml={LocateIconSvg} width="24" height="24" style={styles.icon} />
+          <Text style={styles.text}>Locate</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={onPressOption3}>
+          <SvgXml xml={ProfileIconSvg} width="24" height="24" style={styles.icon} />
+          <Text style={styles.text}>Profile</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    justifyContent: 'flex-end'
+  },
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',

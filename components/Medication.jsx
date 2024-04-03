@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SvgXml } from 'react-native';
+import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, Modal } from 'react-native';
 import { LinearGradient } from 'react-native-linear-gradient';
 import MedicationContent from './MedicationContent';
 import NavigationBar from './NavigationBar';
 import { Platform } from 'react-native';
-// import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import LeftImage from '../assets/logo_app.png';
 import RightImage from '../assets/setting.png';
-import DateTimePicker from '@react-native-community/datetimepicker'; // Import DateTimePicker
 
-const defaultStartDate = 'From Date'; // Default start date text
-const defaultEndDate = 'To Date'; // Default end date text
-const defaultTime = 'Set Time'; // Default time format
+const defaultStartDate = 'From Date';
+const defaultEndDate = 'To Date';
+const defaultTime = 'Set Time';
 
 const mealImages = {
   breakfast: require('../assets/breakfast.png'),
@@ -31,11 +30,12 @@ const Medication = () => {
   const [title, setTitle] = useState('');
   const [dateInput1, setDateInput1] = useState(defaultStartDate);
   const [dateInput2, setDateInput2] = useState(defaultEndDate);
-  const [input4, setInput4] = useState(defaultTime); // Initialize with default time
+  const [input4, setInput4] = useState(defaultTime);
   const [input5, setInput5] = useState('');
   const [showDatePicker1, setShowDatePicker1] = useState(false);
   const [showDatePicker2, setShowDatePicker2] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const [mealState, setMealState] = useState({
     breakfast: false,
@@ -80,8 +80,6 @@ const Medication = () => {
     console.log('Input 1:', dateInput1);
     console.log('Input 2:', dateInput2);
     console.log('Input 4:', input4);
-    // console.log('Input 5:', input5);
-    // Add functionality to handle submission
   };
 
   return (
@@ -97,39 +95,48 @@ const Medication = () => {
         <View style={styles.content}>
           <Image source={require('../assets/wireframe.png')} style={styles.frame} />
           <Text style={styles.contentText}>Choose the Medicine</Text>
-          <View style={[styles.svgRow, {bottom: 220}]}>
+          <View style={[styles.svgRow, { bottom: 220 }]}>
             {Object.keys(mealImages).map((meal) => (
               <TouchableOpacity key={meal} onPress={() => toggleMeal(meal)}>
-                <Image source={mealState[meal] ? selectedImages[meal] : mealImages[meal]} style={[styles.svgImage, {width: 40, height: 40}]} />
+                <Image
+                  source={mealState[meal] ? selectedImages[meal] : mealImages[meal]}
+                  style={[styles.svgImage, { width: 40, height: 40 }]}
+                />
               </TouchableOpacity>
             ))}
           </View>
+          <Image source={require('../assets/Pill.png')} style={[styles.dateImage, { left: 40, bottom: 165 }]} />
           <TextInput
-            style={[styles.input, styles.whiteBackground, styles.blackText, {marginTop: 10, left: 52, bottom: 185}]}
+            style={[styles.input, styles.whiteBackground, styles.blackText, { marginTop: 10, left: 65, bottom: 203 }]}
             placeholder="Title"
             placeholderTextColor="gray"
             value={title}
             onChangeText={setTitle}
           />
           <View style={styles.inputRow}>
-              <Image source={require('../assets/Calendar.png')} style={[styles.dateImage, { left: 15, bottom: 180}]} />
-              <TouchableOpacity style={[styles.datePickerButton, styles.whiteBackground, {marginTop: 30, left: 5, bottom: 199}]} onPress={() => setShowTimePicker(true)}>
-                <Text style={styles.datePickerButtonText}>{input4}</Text>
-              </TouchableOpacity>
-              {showTimePicker && (
-                <DateTimePicker
-                  value={new Date()}
-                  mode="time"
-                  display="spinner"
-                  onChange={handleTimeChange}
-                />
-              )}
-            </View>
-
+            <Image source={require('../assets/clock.png')} style={[styles.dateImage, { left: 15, bottom: 200 }]} />
+            <TouchableOpacity
+              style={[styles.datePickerButton, styles.whiteBackground, { marginTop: 30, left: 5, bottom: 219 }]}
+              onPress={() => setShowTimePicker(true)}
+            >
+              <Text style={styles.datePickerButtonText}>{input4}</Text>
+            </TouchableOpacity>
+            {showTimePicker && (
+              <DateTimePicker
+                value={new Date()}
+                mode="time"
+                display="spinner"
+                onChange={handleTimeChange}
+              />
+            )}
+          </View>
           <View style={styles.inputTable}>
             <View style={styles.inputRow}>
-              <Image source={require('../assets/Calendar.png')} style={[styles.dateImage, { left: 20, bottom: 180}]} />
-              <TouchableOpacity style={[styles.datePickerButton, styles.whiteBackground, {marginTop: 30, left: 10, bottom: 199}]} onPress={() => setShowDatePicker1(true)}>
+              <Image source={require('../assets/Calendar.png')} style={[styles.dateImage, { left: 20, bottom: 200 }]} />
+              <TouchableOpacity
+                style={[styles.datePickerButton, styles.whiteBackground, { marginTop: 30, left: 10, bottom: 219 }]}
+                onPress={() => setShowDatePicker1(true)}
+              >
                 <Text style={styles.datePickerButtonText}>{dateInput1}</Text>
               </TouchableOpacity>
               {showDatePicker1 && (
@@ -142,8 +149,11 @@ const Medication = () => {
               )}
             </View>
             <View style={styles.inputRow}>
-              <Image source={require('../assets/Calendar.png')} style={[styles.dateImage, {right: 12 ,bottom: 180}]} />
-              <TouchableOpacity style={[styles.datePickerButton, styles.whiteBackground, {marginTop: 30, right: 21, bottom: 199}]} onPress={() => setShowDatePicker2(true)}>
+              <Image source={require('../assets/Calendar.png')} style={[styles.dateImage, { right: 12, bottom: 200 }]} />
+              <TouchableOpacity
+                style={[styles.datePickerButton, styles.whiteBackground, { marginTop: 30, right: 21, bottom: 219 }]}
+                onPress={() => setShowDatePicker2(true)}
+              >
                 <Text style={styles.datePickerButtonText}>{dateInput2}</Text>
               </TouchableOpacity>
               {showDatePicker2 && (
@@ -159,8 +169,24 @@ const Medication = () => {
           <TouchableOpacity style={styles.button} onPress={handleSubmit}>
             <Text style={styles.buttonText}>Submit</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.historyButton} onPress={() => setShowModal(true)}>
+            <Text style={{ color: 'darkorange', textAlign: 'right' }}>Show Medical History</Text>
+          </TouchableOpacity>
         </View>
         <NavigationBar />
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={showModal}
+          onRequestClose={() => setShowModal(false)}
+        >
+          <View style={styles.modalContainer}>
+            <Text style={{ fontSize: 20, marginBottom: 20 }}>Medical History</Text>
+            <TouchableOpacity style={styles.goBackButton} onPress={() => setShowModal(false)}>
+              <Text style={{ color: 'white' }}>Go Back</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
       </View>
     </LinearGradient>
   );
@@ -180,7 +206,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
-    marginBottom: -15,
+    marginBottom: -349,
     padding: 20,
     bottom: 16,
   },
@@ -188,7 +214,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     left: 7,
     bottom: 230,
-    // fontWeight: 'bold',
     color: 'gray',
     paddingBottom: 15,
   },
@@ -215,16 +240,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   inputRow: {
-    flexDirection: 'row', // Change to row layout
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center', // Align items horizontally
-    width: '45%', // Adjust as needed
+    justifyContent: 'center',
+    width: '45%',
   },
   input: {
-    width: '80%',
+    width: '60%',
     height: 38,
     borderColor: 'gray',
-    // borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 10,
@@ -241,7 +265,7 @@ const styles = StyleSheet.create({
     marginBottom: -8,
   },
   whiteBackground: {
-    backgroundColor: '#FFF', 
+    backgroundColor: '#FFF',
   },
   blackText: {
     color: 'black',
@@ -250,11 +274,10 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   dateLabel: {
-    // Remove position: 'absolute'
     color: 'gray',
     fontSize: 17,
-    marginLeft: 10, // Adjust as needed
-    marginRight: 5, // Adjust as needed
+    marginLeft: 10,
+    marginRight: 5,
   },
   dateImage: {
     width: 20,
@@ -268,13 +291,29 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginTop: 80,
     width: '96%',
-    bottom: 240,
+    bottom: 270,
     left: 8,
   },
   buttonText: {
     textAlign: 'center',
     fontSize: 18,
     color: 'white',
+  },
+  historyButton: {
+    alignSelf: 'flex-end',
+    marginTop: 10,
+    bottom: 260,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    padding: 20,
+  },
+  goBackButton: {
+    backgroundColor: 'orange',
+    padding: 15,
+    borderRadius: 20,
   },
 });
 
