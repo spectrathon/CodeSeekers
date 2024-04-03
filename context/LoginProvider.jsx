@@ -9,6 +9,7 @@ const LoginProvider = props => {
     const [role, setRole] = useState(null);
     const [permission, setPermission] = useState(false);
     const [code, setCode] = useState(null);
+    const [medication, setMedication] = useState([]);
     const [caretaker, setCaretaker] = useState({name: '', email: '', age: '', gender: '', number: '', });
     const [userCurrentLocation, setUserCurrentLocation] = useState([74,15]);
     const [userHomeLocation, setUserHomeLocation] = useState([73.98100068685548, 15.423282817707287]);
