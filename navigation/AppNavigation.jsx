@@ -12,6 +12,7 @@ import CaretakerHome from '../components/Home/CaretakerHome';
 import Maps from '../components/Maps'
 import Allbackgroundservices from '../components/Userbackgroundservices/Alluserbackgroundservices';
 import Medication from "../components/Medication"
+import MedicationContent from '../components/MedicationContent';
 
 const Stack = createNativeStackNavigator();
 const AppNavigation = () => {
@@ -20,7 +21,7 @@ const AppNavigation = () => {
   
   useEffect(()=>{
     storageAccess();
-    setLoading(false);
+    setLoading(true);
  },[]);
 
  const storageAccess = async()=>{
@@ -85,6 +86,7 @@ else if (isLoggedIn && role==="caretaker" && code){
         <Stack.Screen name="CaretakerHome" component={CaretakerHome}/>
         <Stack.Screen name="Maps"  component={Maps}/>
         <Stack.Screen name="Medication"  component={Medication}/>
+        <Stack.Screen name="MedicationContent"  component={MedicationContent}/>
       </Stack.Navigator>
   );
 }

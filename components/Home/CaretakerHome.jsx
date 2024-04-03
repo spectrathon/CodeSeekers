@@ -11,6 +11,8 @@ const CaretakerHome = ({navigation}) => {
             <Text onPress={()=>navigation.navigate("Maps")} >Maps</Text>
             <Text></Text>
             <Text onPress={()=>navigation.navigate("Medication")} >Medication</Text>
+            <Text></Text>
+            <Text onPress={()=>navigation.navigate("MedicationContent")} >MedicationContent</Text>
         </View>
     );
 };

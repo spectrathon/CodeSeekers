@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import LottieView from 'lottie-react-native';
+import LoaderAnimation from '../../Animation/Animation.json'
 
 const Loading = () => {
     return (
-        <View style={styles.container}>
-            <Text>Loading...</Text>
-        </View>
+        <LottieView source={LoaderAnimation} autoPlay loop />
     );
 };
 

@@ -28,7 +28,7 @@ const selectedImages = {
   dinner: require('../assets/dinner.png'),
 };
 
-const Medication = () => {
+const Medication = ({navigation}) => {
   const {medication,code,setMedication} = useLogin();
   const [title, setTitle] = useState('');
   const [dateInput1, setDateInput1] = useState(defaultStartDate);
@@ -206,7 +206,7 @@ const Medication = () => {
             <Text style={{ color: 'darkorange', textAlign: 'right' }}>Show Medical History</Text>
           </TouchableOpacity>
         </View>
-        <NavigationBar />
+        <NavigationBar navigation={navigation} />
         <Modal
           animationType="slide"
           transparent={false}
