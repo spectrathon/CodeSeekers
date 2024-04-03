@@ -4,11 +4,15 @@ import { SafeAreaView } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import CaretakerLogin from './components/CaretakerLogin';
 import CaretakerSignUp from './components/CaretakerSignUp';
+import NavigationBar from './components/NavigationBar';
+import Maps from './components/Maps';
 const App = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {/* <CaretakerLogin/> */}
-      <CaretakerSignUp/>
+      {/* <CaretakerSignUp/> */}
+      {/* <NavigationBar/> */}
+      <Maps/>
     </SafeAreaView>
   );
 };
