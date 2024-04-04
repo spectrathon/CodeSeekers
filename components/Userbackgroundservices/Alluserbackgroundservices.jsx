@@ -356,7 +356,7 @@ export default function Allbackgroundservices({navigation}) {
         await Promise.all([stopBackgroundService(), stopBackgroundService1(),stopBackgroundService2()]);
       };
       const redirect = ()=>{
-        // startAllBackgroundServices();
+        startAllBackgroundServices();
         navigation.navigate("UserPage")
       }
   return (
