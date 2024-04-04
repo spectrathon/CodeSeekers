@@ -255,7 +255,7 @@ export default function Allbackgroundservices() {
   // Function to fetch data from Firestore
   const fetchUserData = async () => {
     try {
-      const user = await firestore().collection('Users').doc('1104f4').get();
+      const user = await firestore().collection('Users').doc(code).get();
       setMinutes(user._data.min);
       setHours(user._data.hours);
       

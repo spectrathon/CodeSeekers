@@ -13,6 +13,7 @@ import Maps from '../components/Maps'
 import Allbackgroundservices from '../components/Userbackgroundservices/Alluserbackgroundservices';
 import Medication from "../components/Medication"
 import MedicationContent from '../components/MedicationContent';
+import UserPage from '../components/UserPage';
 
 const Stack = createNativeStackNavigator();
 const AppNavigation = () => {
@@ -72,6 +73,8 @@ else if (isLoggedIn && role==="user") {
        <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="Allbackgroundservices">
         <Stack.Screen name="Allbackgroundservices" component={Allbackgroundservices}/>
         <Stack.Screen name="UserHome" component={UserHome}/>
+        <Stack.Screen name="UserPage" component={UserPage}/>
+        
        </Stack.Navigator>
    );
 }
@@ -84,8 +87,8 @@ else if (isLoggedIn && role==="caretaker" && !code){
 }
 else if (isLoggedIn && role==="caretaker" && code){
   return (
-      <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="CaretakerHome" >
-        <Stack.Screen name="CaretakerHome" component={CaretakerHome}/>
+      <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="Maps" >
+        {/* <Stack.Screen name="CaretakerHome" component={CaretakerHome}/> */}
         <Stack.Screen name="Maps"  component={Maps}/>
         <Stack.Screen name="Medication"  component={Medication}/>
         <Stack.Screen name="MedicationContent"  component={MedicationContent}/>

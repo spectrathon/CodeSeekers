@@ -106,7 +106,8 @@ const Medication = ({navigation}) => {
     try {
       console.log(medication);
       const updatedMeds = [...medication, params]; // Use a spread operator to create a new array
-      await firestore().collection('Users').doc("57f490").update({ medication: updatedMeds });
+      await firestore().collection('Users').doc(code).update({ medication: updatedMeds});
+      await firestore().collection('Users').doc(code).update({hours:parseInt(hours),mins:parseInt(minutes)});
       const medsString = JSON.stringify(updatedMeds);
       await AsyncStorage.setItem("meds", medsString);
       setMedication(updatedMeds); // Update state
