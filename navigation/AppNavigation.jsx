@@ -72,11 +72,11 @@ if(!isLoggedIn){
 }
 else if (isLoggedIn && role==="user") {
    return (
-       <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="Allbackgroundservices">
+       <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="UserPage">
         <Stack.Screen name="Allbackgroundservices" component={Allbackgroundservices}/>
+        <Stack.Screen name="UserPage" component={UserPage}/>
         <Stack.Screen name="MedHistory"  component={MedHistory}/>
         <Stack.Screen name="UserHome" component={UserHome}/>
-        <Stack.Screen name="UserPage" component={UserPage}/>
         
        </Stack.Navigator>
    );

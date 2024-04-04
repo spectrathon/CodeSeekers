@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Geolocation from '@react-native-community/geolocation';
 import UserPage from '../UserPage';
 
-export default function Allbackgroundservices() {
+export default function Allbackgroundservices({navigation}) {
 
     const [accelSubscription, setAccelSubscription] = useState(null);
     const [gyroSubscription, setGyroSubscription] = useState(null);
@@ -42,7 +42,8 @@ export default function Allbackgroundservices() {
               if (detectFall(acceleration, latestGyroscope)) {
                 console.log('Fall detected 1');
                 AsyncStorage.setItem('detectedKey', "1")
-                setTimeout(async() => {
+                // Set timeout to remove the token after 30 seconds
+                setTimeout(async () => {
                   if (await AsyncStorage.getItem('detectedKey')) {
                     try {
                       if(temp){
@@ -56,7 +57,7 @@ export default function Allbackgroundservices() {
                   else {
                     console.log("Fall Cancelled");
                   }
-                }, 20000);
+                }, 30000); // 30 seconds
                 showNotification();
               }
               console.log(`______`);
@@ -67,7 +68,7 @@ export default function Allbackgroundservices() {
               console.log("Error reading accelerometer data:", error);
             }
           );
-  
+          
         const gyroSub = gyroscope
           .pipe(
             map(({ x, y, z }) => ({ x, y, z }))
@@ -354,12 +355,27 @@ export default function Allbackgroundservices() {
       const stopAllBackgroundServices = async () => {
         await Promise.all([stopBackgroundService(), stopBackgroundService1(),stopBackgroundService2()]);
       };
-      
+      const redirect = ()=>{
+        // startAllBackgroundServices();
+        navigation.navigate("UserPage")
+      }
   return (
     <View>
-       <Text>Allbackgroundservices</Text>
-      <Button title="Start All Background Services" onPress={startAllBackgroundServices} />
-      <Button title="Stop All Background Services" onPress={stopAllBackgroundServices} />
+      <Text style={{
+    fontSize: 32, // Adjust this value as per your design requirements
+    fontWeight: 'bold', // You can adjust font weight as needed
+    color: '#333', // You can adjust the color as needed
+    textAlign: 'center',
+    padding:60 // You can adjust the alignment as needed
+    // Add more styling properties as needed
+  }} >SafeMinder</Text>
+      <Text style={{padding:30,color:"black"}}>
+        Please allow the background permissions to start
+      </Text>
+      <Button  title="Start All Background Services" onPress={redirect} />
+      <Text></Text>
+      <Button  title="All Ready Started Service ? " onPress={()=>navigation.navigate("UserPage")} />
+      {/* <Button title="Stop All Background Services" onPress={stopAllBackgroundServices} /> */}
       <UserPage/>
     </View>
   )

@@ -1,8 +1,41 @@
-import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React,{useEffect, useState} from 'react';
+import { View, StyleSheet, TouchableOpacity, Image, Linking } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { useLogin } from '../context/LoginProvider';
+import Voice from '@react-native-voice/voice';
+const UserPage = ({navigation}) => {
 
-const UserPage = () => {
+  const [recognizedText, setRecognizedText] = useState('');
+  const {userCurrentLocation} = useLogin();
+
+  useEffect(()=>{
+    if(recognizedText.includes("Take me Home")){
+      Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${userCurrentLocation[1]},${userCurrentLocation[0]}`);
+    }
+  },[recognizedText]);
+
+  const startRecognition = async () => {
+    try {
+      await Voice.start('en-US');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const stopRecognition = async () => {
+    try {
+      await Voice.stop();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onSpeechResults = (event) => {
+    setRecognizedText(event.value[0]);
+  };
+
+  Voice.onSpeechResults = onSpeechResults;
+
   const handleSettingsPress = () => {
     // Add functionality for Settings image press
     console.log('Settings image pressed');
@@ -10,30 +43,35 @@ const UserPage = () => {
 
   const handleHomePress = () => {
     // Add functionality for Home image press
+    Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${userCurrentLocation[1]},${userCurrentLocation[0]}`)
     console.log('Home image pressed');
   };
 
   const handleMedicinePress = () => {
     // Add functionality for Medicine image press
+    navigation.navigate('MedHistory');
     console.log('Medicine image pressed');
   };
 
   const handleVoicePress = () => {
     // Add functionality for Voice image press
+    startRecognition()
     console.log('Voice image pressed');
   };
 
   const handleDialOnePress = () => {
-    // Add functionality for Dial One image press
+ 
+    Linking.openURL(`tel:${7498520221}`);
     console.log('Dial One image pressed');
   };
 
   const handleDialTwoPress = () => {
-    // Add functionality for Dial Two image press
+    Linking.openURL(`tel:${9997799769}`);
     console.log('Dial Two image pressed');
   };
 
   const handleSOSPress = () => {
+    Linking.openURL(`tel:${88065705}`);
     // Add functionality for SOS image press
     console.log('SOS image pressed');
   };

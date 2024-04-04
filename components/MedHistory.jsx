@@ -14,7 +14,7 @@ import {useLogin} from '../context/LoginProvider';
 
 import bgImage from "../assets/medhistoryBG.png"
 
-const MedHistory = () => {
+const MedHistory = ({navigation}) => {
   const [medications, setMedications] = useState([]);
   const {code} = useLogin();
 
@@ -36,6 +36,7 @@ const MedHistory = () => {
   };
   const handleCloseButton = () => {
     // Add functionality for right image press
+    navigation.navigate('UserPage');
   };
 
   return (
