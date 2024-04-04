@@ -42,6 +42,8 @@ const UserSignUp = ({navigation}) => {
         caretakerNo:caretaker.number,
         userNo:number,
         medication:[],
+        hours,
+        mins,
         fallDetected:false,
         boundStatus:false,
         homeLocation:{latitude:15.16,longitude:74.012},
