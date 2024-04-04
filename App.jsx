@@ -21,6 +21,32 @@ const App = () => {
       },
       created => console.log(`createChannel returned '${created}'`), // callback function
     );
+    PushNotification.createChannel(
+      {
+        channelId: 'Caretaker-alert', // Channel ID
+        channelName: 'Caretaker-alert', // Channel Name
+        channelDescription: 'Channel for fall/out of bound alerts', // Channel Description
+        playSound: true,
+        soundName: 'default',
+        importance: 4,
+        vibrate: true,
+      },
+      created => console.log(`createChannel returned '${created}'`), // callback function
+    );
+    PushNotification.createChannel(
+      {
+        channelId: 'User-alert', // Channel ID
+        channelName: 'User-alert', // Channel Name
+        channelDescription: 'You have have been notified', // Channel Description
+        playSound: true,
+        soundName: 'default',
+        importance: 4,
+        vibrate: true,
+      },
+      created => console.log(`createChannel returned '${created}'`), // callback function
+    );
+
+    
   }, []);
   return (
     <LoginProvider>

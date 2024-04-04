@@ -50,10 +50,10 @@ const Maps = ({navigation}) => {
   };
   const showNotification = (mess) => {
     PushNotification.localNotification({
-      channelId: "medication-channel", // Channel ID
-      title: 'Medication Reminder',
+      channelId: "Caretaker-alert", // Channel ID
+      title: 'Alert',
       message: mess,
-      actions: ['Take Medication'], // Button label
+      // actions: ['Take Medication'], // Button label
       // data:{screen:"CodeInfo"},
       // onPress:navigation.navigate("Codeinfo")
     });

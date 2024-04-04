@@ -26,7 +26,6 @@ const MedHistory = () => {
     const res = await firestore().collection('Users').doc(code).get();
     const tempMedications = await res._data.medication;
     setMedications(tempMedications);
-    console.log(medications);
   };
 
   const handleRightPress = () => {

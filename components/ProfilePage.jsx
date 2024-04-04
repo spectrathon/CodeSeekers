@@ -2,8 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Animated } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import NavigationBar from './NavigationBar';
+import firestore from '@react-native-firebase/firestore';
+import { useLogin } from '../context/LoginProvider';
 
 const ProfilePage = () => {
+
+  const [user,setUser] = useState({name:"",age:"",number:"",email:""});
+  const {code} = useLogin();
+
+  useEffect(()=>{
+    get();
+  },[]);
+
+  const get = async()=>{
+    const user =await firestore().collection('Users').doc(code).get();
+    const temp =await user._data;
+    setUser({email:temp.caretakerEmail,name:temp.caretakerName,})
+  }
   
   return (
     <LinearGradient

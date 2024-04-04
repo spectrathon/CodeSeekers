@@ -35,7 +35,7 @@ const CaretakerLogin = ({navigation}) => {
       setRole("caretaker");
       setIsLoggedIn(true);
       console.log("Logged");
-      navigation.navigate("Alluserbackgroundservices");
+      navigation.navigate("Allbackgroundservices");
     } catch (error) {
       if(error.code ==='auth/invalid-credential'){
         Alert.alert("Email not registered");

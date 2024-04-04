@@ -133,9 +133,9 @@ export default function Allbackgroundservices() {
   
       const showNotification = () => {
         PushNotification.localNotification({
-          channelId: "medication-channel", // Channel ID
-          title: 'Medication Reminder',
-          message: 'Time to take your medication!',
+          channelId: "Caretaker-alert", // Channel ID
+          title: 'Accidental Fall',
+          message: 'If your phone has accidently fallen then click the notification',
           // data:{screen:"FallDetection"}
           // onPress:navigation.navigate("FallAlert")
         });
@@ -207,7 +207,7 @@ export default function Allbackgroundservices() {
                           if (distance>tempRadius) {
                             console.log("User out of bound");
                             await firestore().collection('Users').doc(code).update({boundStatus:true});
-                            showNotification();
+                            outofboundshowNotification();
                           }
                           else {
                             console.log("User inside bound");
@@ -243,6 +243,15 @@ export default function Allbackgroundservices() {
           },
       };
   
+      const outofboundshowNotification = () => {
+        PushNotification.localNotification({
+          channelId: "User-alert", // Channel ID
+          title: 'you have gone out of the marked area to return',
+          message: "If you're trying to find your way back home open the app",
+          // data:{screen:"FallDetection"}
+          // onPress:navigation.navigate("FallAlert")
+        });
+      };
       const startBackgroundService1 = async () => {
           await BackgroundService.start(veryIntensiveTask, options);
       };
