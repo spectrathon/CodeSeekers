@@ -21,7 +21,9 @@ const AppNavigation = () => {
   
   useEffect(()=>{
     storageAccess();
-    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
  },[]);
 
  const storageAccess = async()=>{
