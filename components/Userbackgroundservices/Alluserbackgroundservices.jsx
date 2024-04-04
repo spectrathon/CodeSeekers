@@ -45,10 +45,12 @@ export default function Allbackgroundservices({navigation}) {
                 // Set timeout to remove the token after 30 seconds
                 setTimeout(async () => {
                   if (await AsyncStorage.getItem('detectedKey')) {
+                    navigation.navigate("FallAlert");
                     try {
                       if(temp){
                         const res = await firestore().collection('Users').doc(code).update({'fallDetected': true})
                         console.log('Fall send');
+                        await AsyncStorage.removeItem('detectedkey');
                       }
                     } catch (error) {
                       console.log(error);

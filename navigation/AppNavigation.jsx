@@ -16,6 +16,7 @@ import MedicationContent from '../components/MedicationContent';
 import UserPage from '../components/UserPage';
 import MedHistory from '../components/MedHistory';
 import ProfilePage from '../components/ProfilePage';
+import FallAlert from '../components/FallAlert';
 
 const Stack = createNativeStackNavigator();
 const AppNavigation = () => {
@@ -77,6 +78,7 @@ else if (isLoggedIn && role==="user") {
         <Stack.Screen name="UserPage" component={UserPage}/>
         <Stack.Screen name="MedHistory"  component={MedHistory}/>
         <Stack.Screen name="UserHome" component={UserHome}/>
+        <Stack.Screen name="FallAlert" component={FallAlert}/>
         
        </Stack.Navigator>
    );
@@ -90,11 +92,11 @@ else if (isLoggedIn && role==="caretaker" && !code){
 }
 else if (isLoggedIn && role==="caretaker" && code){
   return (
-      <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="ProfilePage" >
+      <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="Maps" >
         {/* <Stack.Screen name="CaretakerHome" component={CaretakerHome}/> */}
+        <Stack.Screen name="Maps"  component={Maps}/>
         <Stack.Screen name="ProfilePage"  component={ProfilePage}/>
         <Stack.Screen name="MedHistory"  component={MedHistory}/>
-        <Stack.Screen name="Maps"  component={Maps}/>
         <Stack.Screen name="Medication"  component={Medication}/>
         <Stack.Screen name="MedicationContent"  component={MedicationContent}/>
       </Stack.Navigator>
