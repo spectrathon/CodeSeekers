@@ -14,6 +14,7 @@ import Allbackgroundservices from '../components/Userbackgroundservices/Alluserb
 import Medication from "../components/Medication"
 import MedicationContent from '../components/MedicationContent';
 import UserPage from '../components/UserPage';
+import MedHistory from '../components/MedHistory';
 
 const Stack = createNativeStackNavigator();
 const AppNavigation = () => {
@@ -71,6 +72,7 @@ if(!isLoggedIn){
 else if (isLoggedIn && role==="user") {
    return (
        <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="Allbackgroundservices">
+        <Stack.Screen name="MedHistory"  component={MedHistory}/>
         <Stack.Screen name="Allbackgroundservices" component={Allbackgroundservices}/>
         <Stack.Screen name="UserHome" component={UserHome}/>
         <Stack.Screen name="UserPage" component={UserPage}/>
@@ -87,8 +89,9 @@ else if (isLoggedIn && role==="caretaker" && !code){
 }
 else if (isLoggedIn && role==="caretaker" && code){
   return (
-      <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="Maps" >
+      <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="MedHistory" >
         {/* <Stack.Screen name="CaretakerHome" component={CaretakerHome}/> */}
+        <Stack.Screen name="MedHistory"  component={MedHistory}/>
         <Stack.Screen name="Maps"  component={Maps}/>
         <Stack.Screen name="Medication"  component={Medication}/>
         <Stack.Screen name="MedicationContent"  component={MedicationContent}/>
