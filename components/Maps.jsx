@@ -11,7 +11,7 @@ import BackgroundService from 'react-native-background-actions';
 Mapbox.setAccessToken('pk.eyJ1IjoiY29kZXNlZWtlcnMiLCJhIjoiY2x1ZmRidHkzMGtxMjJrcm84Nm93azFydyJ9.4PcFMmvYRH31QSZmtU1cXA');
 import PushNotification from 'react-native-push-notification';
 
-const Maps = () => {
+const Maps = ({navigation}) => {
   // background function for caretaker for Fall and bounddetect
   const {code} = useLogin();
   const [serviceRunning,setServiceRunning]=useState(false)
@@ -258,7 +258,7 @@ const Maps = () => {
             <Button title="Submit" disabled={!centerCoordinates || !locRadius} onPress={() => handleSubmit()} />
           </View>
         </Modal>
-      <NavigationBar/>
+      <NavigationBar navigation={navigation} />
       </View>
     </LinearGradient>
   );

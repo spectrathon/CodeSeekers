@@ -163,19 +163,19 @@ const ProfileIconSvg = `
 `;
 
 
-const NavigationBar = ({ onPressOption1, onPressOption2, onPressOption3 }) => {
+const NavigationBar = ({navigation}) => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.container}>
-        <TouchableOpacity style={styles.button} onPress={onPressOption1}>
+        <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Medication')} >
           <SvgXml xml={HealthIconSvg} width="24" height="24" style={styles.icon} />
           <Text style={styles.text}>Health</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={onPressOption2}>
+        <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Maps')} >
           <SvgXml xml={LocateIconSvg} width="24" height="24" style={styles.icon} />
           <Text style={styles.text}>Locate</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={onPressOption3}>
+        <TouchableOpacity style={styles.button} >
           <SvgXml xml={ProfileIconSvg} width="24" height="24" style={styles.icon} />
           <Text style={styles.text}>Profile</Text>
         </TouchableOpacity>

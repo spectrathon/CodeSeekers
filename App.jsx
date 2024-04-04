@@ -8,7 +8,6 @@ import PushNotification from 'react-native-push-notification';
 LogBox.ignoreLogs(['new NativeEventEmitter']);
 
 const App = () => {
-  const [showNavbar,setShowNavbar] = useState(true);
   useEffect(() => {
     PushNotification.createChannel(
       {
@@ -26,9 +25,8 @@ const App = () => {
   return (
     <LoginProvider>
     <NavigationContainer>
-      <AppNavigation setShowNavbar={setShowNavbar}/>
+      <AppNavigation/>
     </NavigationContainer>
-    { showNavbar && <NavigationBar />}
     </LoginProvider>
   );
 };
