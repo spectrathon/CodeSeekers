@@ -8,6 +8,7 @@ import firestore from '@react-native-firebase/firestore';
 import { useLogin } from '../../context/LoginProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Geolocation from '@react-native-community/geolocation';
+import UserPage from '../UserPage';
 
 export default function Allbackgroundservices() {
 
@@ -359,6 +360,7 @@ export default function Allbackgroundservices() {
        <Text>Allbackgroundservices</Text>
       <Button title="Start All Background Services" onPress={startAllBackgroundServices} />
       <Button title="Stop All Background Services" onPress={stopAllBackgroundServices} />
+      <UserPage/>
     </View>
   )
 }

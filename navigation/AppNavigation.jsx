@@ -73,8 +73,8 @@ if(!isLoggedIn){
 else if (isLoggedIn && role==="user") {
    return (
        <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="Allbackgroundservices">
-        <Stack.Screen name="MedHistory"  component={MedHistory}/>
         <Stack.Screen name="Allbackgroundservices" component={Allbackgroundservices}/>
+        <Stack.Screen name="MedHistory"  component={MedHistory}/>
         <Stack.Screen name="UserHome" component={UserHome}/>
         <Stack.Screen name="UserPage" component={UserPage}/>
         
